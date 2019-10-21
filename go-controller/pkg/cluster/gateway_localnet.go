@@ -108,7 +108,7 @@ func localnetGatewayNAT(ipt util.IPTablesHelper, ifname, ip string) error {
 
 func initLocalnetGateway(nodeName string, clusterIPSubnet []string,
 	subnet string, wf *factory.WatchFactory) error {
-	ipt, err := util.GetIPTablesHelper(iptables.ProtocolIPv4)
+	ipt, err := util.GetIPTablesHelper(iptables.ProtocolIPv6)
 	if err != nil {
 		return fmt.Errorf("failed to initialize iptables: %v", err)
 	}
@@ -210,7 +210,7 @@ func localnetAddService(svc *kapi.Service) error {
 	if !util.ServiceTypeHasNodePort(svc) {
 		return nil
 	}
-	ipt, err := util.GetIPTablesHelper(iptables.ProtocolIPv4)
+	ipt, err := util.GetIPTablesHelper(iptables.ProtocolIPv6)
 	if err != nil {
 		return fmt.Errorf("failed to initialize iptables: %v", err)
 	}
@@ -223,7 +223,7 @@ func localnetDeleteService(svc *kapi.Service) error {
 	if !util.ServiceTypeHasNodePort(svc) {
 		return nil
 	}
-	ipt, err := util.GetIPTablesHelper(iptables.ProtocolIPv4)
+	ipt, err := util.GetIPTablesHelper(iptables.ProtocolIPv6)
 	if err != nil {
 		return fmt.Errorf("failed to initialize iptables: %v", err)
 	}
