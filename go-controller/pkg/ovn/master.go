@@ -60,7 +60,7 @@ func (oc *Controller) StartClusterMaster(masterNodeName string) error {
 			alreadyAllocated = append(alreadyAllocated, hostsubnet)
 		}
 	}
-	masterSubnetAllocatorList := make([]*netutils.SubnetAllocator, 0)
+	masterSubnetAllocatorList := make([]netutils.SubnetAllocator, 0)
 	// NewSubnetAllocator is a subnet IPAM, which takes a CIDR (first argument)
 	// and gives out subnets of length 'hostSubnetLength' (second argument)
 	// but omitting any that exist in 'subrange' (third argument)
@@ -514,7 +514,7 @@ func (oc *Controller) addNode(node *kapi.Node) (hostsubnet *net.IPNet, err error
 	}
 
 	// Node doesn't have a subnet assigned; reserve a new one for it
-	var subnetAllocator *netutils.SubnetAllocator
+	var subnetAllocator netutils.SubnetAllocator
 	err = netutils.ErrSubnetAllocatorFull
 	for _, subnetAllocator = range oc.masterSubnetAllocatorList {
 		hostsubnet, err = subnetAllocator.GetNetwork()
