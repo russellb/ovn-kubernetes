@@ -73,7 +73,7 @@ func (cluster *OvnClusterController) StartClusterNode(name string) error {
 	var node *kapi.Node
 	var subnet *net.IPNet
 	var clusterSubnets []string
-	var cidr string
+	var ipv6_prefix string
 	var connected bool
 
 	var wg sync.WaitGroup
@@ -91,7 +91,8 @@ func (cluster *OvnClusterController) StartClusterNode(name string) error {
 			logrus.Errorf("Error starting node %s, no node found - %v", name, err)
 			return false, nil
 		}
-		if cidr, _, err = util.RunOVNNbctl("get", "logical_switch", node.Name, "other-config:subnet"); err != nil {
+		// FIXME: use other-config:subnet on IPv4
+		if ipv6_prefix, _, err = util.RunOVNNbctl("get", "logical_switch", node.Name, "other-config:ipv6_prefix"); err != nil {
 			return false, nil
 		}
 		return true, nil
@@ -100,6 +101,8 @@ func (cluster *OvnClusterController) StartClusterNode(name string) error {
 		return err
 	}
 
+	// FIXME: do we have to assume /64?
+	cidr := fmt.Sprintf("%s/64", ipv6_prefix)
 	_, subnet, err = net.ParseCIDR(cidr)
 	if err != nil {
 		logrus.Errorf("Invalid hostsubnet found for node %s - %v", node.Name, err)
