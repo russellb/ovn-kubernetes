@@ -4,6 +4,7 @@ package cluster
 
 import (
 	"fmt"
+	"net"
 	"reflect"
 	"strings"
 	"time"
@@ -202,7 +203,14 @@ func localnetIptRules(svc *kapi.Service) []iptRule {
 		}
 
 		nodePort := fmt.Sprintf("%d", svcPort.NodePort)
-		destination := strings.Split(localnetGatewayIP, "/")[0] + ":" + nodePort
+		destination := ""
+		gwIPstr := strings.Split(localnetGatewayIP, "/")[0]
+		gwIP := net.ParseIP(gwIPstr)
+		if gwIP.To4() != nil {
+			destination = gwIPstr + ":" + nodePort
+		} else {
+			destination = "[" + gwIPstr + "]:" + nodePort
+		}
 
 		rules = append(rules, iptRule{
 			table: "nat",
