@@ -2,6 +2,7 @@ package ovn
 
 import (
 	"fmt"
+
 	"github.com/ovn-org/ovn-kubernetes/go-controller/pkg/config"
 	util "github.com/ovn-org/ovn-kubernetes/go-controller/pkg/util"
 	"github.com/sirupsen/logrus"
