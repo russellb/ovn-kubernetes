@@ -38,8 +38,15 @@ RUN INSTALL_PKGS=" \
 	containernetworking-plugins yum-utils \
 	" && \
 	yum install -y --setopt=tsflags=nodocs --setopt=skip_missing_names_on_install=False $INSTALL_PKGS && \
-	yumdownloader --enablerepo=rhel-fast-datapath-beta ovn2.11 ovn2.11-central ovn2.11-host ovn2.11-vtep && \
-	rpm -Uhv --force --nodeps ovn2.11* && rm -f *.rpm && \
+	rpm -i \
+               http://www.russellbryant.net/openvswitch2.11/2.11.0/26.el7fdp/x86_64/openvswitch2.11-2.11.0-26.el7fdp.x86_64.rpm \
+               http://www.russellbryant.net/openvswitch2.11/2.11.0/26.el7fdp/x86_64/openvswitch2.11-devel-2.11.0-26.el7fdp.x86_64.rpm \
+               http://www.russellbryant.net/openvswitch2.11/2.11.0/26.el7fdp/x86_64/python-openvswitch2.11-2.11.0-26.el7fdp.x86_64.rpm \
+               https://markmc.fedorapeople.org/ovn-2.11.1-12.el7fdn/ovn2.11-2.11.1-12.el7fdn.x86_64.rpm \
+               https://markmc.fedorapeople.org/ovn-2.11.1-12.el7fdn/ovn2.11-debuginfo-2.11.1-12.el7fdn.x86_64.rpm \
+               https://markmc.fedorapeople.org/ovn-2.11.1-12.el7fdn/ovn2.11-central-2.11.1-12.el7fdn.x86_64.rpm \
+               https://markmc.fedorapeople.org/ovn-2.11.1-12.el7fdn/ovn2.11-host-2.11.1-12.el7fdn.x86_64.rpm \
+               https://markmc.fedorapeople.org/ovn-2.11.1-12.el7fdn/ovn2.11-vtep-2.11.1-12.el7fdn.x86_64.rpm && \
 	yum clean all && rm -rf /var/cache/*
 
 RUN mkdir -p /var/run/openvswitch && \
