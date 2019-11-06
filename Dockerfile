@@ -36,6 +36,7 @@ RUN INSTALL_PKGS=" \
 	libpcap iproute strace \
 	openvswitch2.12 openvswitch2.12-devel \
 	containernetworking-plugins yum-utils \
+	numactl-libs unbound-libs openvswitch-selinux-extra-policy \
 	" && \
 	yum install -y --setopt=tsflags=nodocs --setopt=skip_missing_names_on_install=False $INSTALL_PKGS && \
 	rpm -i \
