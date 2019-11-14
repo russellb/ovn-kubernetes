@@ -34,7 +34,6 @@ RUN yum install -y  \
 RUN INSTALL_PKGS=" \
 	PyYAML openssl firewalld-filesystem \
 	libpcap iproute strace \
-	openvswitch2.12 openvswitch2.12-devel \
 	containernetworking-plugins yum-utils \
 	numactl-libs unbound-libs openvswitch-selinux-extra-policy \
 	" && \
