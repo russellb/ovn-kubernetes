@@ -38,7 +38,7 @@ RUN INSTALL_PKGS=" \
 	numactl-libs unbound-libs openvswitch-selinux-extra-policy \
 	" && \
 	yum install -y --setopt=tsflags=nodocs --setopt=skip_missing_names_on_install=False $INSTALL_PKGS && \
-	rpm -i \
+	rpm -i --nodeps \
                http://www.russellbryant.net/openvswitch2.12/openvswitch2.12-2.12.0-4.el7fdp.x86_64.rpm \
                http://www.russellbryant.net/openvswitch2.12/openvswitch2.12-devel-2.12.0-4.el7fdp.x86_64.rpm \
                http://www.russellbryant.net/openvswitch2.12/python-openvswitch2.12-2.12.0-4.el7fdp.x86_64.rpm \
