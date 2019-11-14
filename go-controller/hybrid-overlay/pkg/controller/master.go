@@ -23,7 +23,7 @@ import (
 // MasterController is the master hybrid overlay controller
 type MasterController struct {
 	kube      *kube.Kube
-	allocator []*netutils.SubnetAllocator
+	allocator []netutils.SubnetAllocator
 }
 
 // NewMaster a new master controller that listens for node events
@@ -46,7 +46,7 @@ func NewMaster(clientset kubernetes.Interface, subnets []config.CIDRNetworkEntry
 		}
 	}
 
-	masterSubnetAllocatorList := make([]*netutils.SubnetAllocator, 0)
+	masterSubnetAllocatorList := make([]netutils.SubnetAllocator, 0)
 	// NewSubnetAllocator is a subnet IPAM, which takes a CIDR (first argument)
 	// and gives out subnets of length 'hostSubnetLength' (second argument)
 	// but omitting any that exist in 'subrange' (third argument)
