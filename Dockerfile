@@ -34,14 +34,12 @@ RUN yum install -y  \
 RUN INSTALL_PKGS=" \
 	PyYAML openssl firewalld-filesystem \
 	libpcap iproute strace \
+	openvswitch2.12 openvswitch2.12-devel \
 	containernetworking-plugins yum-utils \
 	numactl-libs unbound-libs openvswitch-selinux-extra-policy \
 	" && \
 	yum install -y --setopt=tsflags=nodocs --setopt=skip_missing_names_on_install=False $INSTALL_PKGS && \
 	rpm -i \
-               http://www.russellbryant.net/openvswitch2.11/2.11.0/26.el7fdp/x86_64/openvswitch2.11-2.11.0-26.el7fdp.x86_64.rpm \
-               http://www.russellbryant.net/openvswitch2.11/2.11.0/26.el7fdp/x86_64/openvswitch2.11-devel-2.11.0-26.el7fdp.x86_64.rpm \
-               http://www.russellbryant.net/openvswitch2.11/2.11.0/26.el7fdp/x86_64/python-openvswitch2.11-2.11.0-26.el7fdp.x86_64.rpm \
                https://markmc.fedorapeople.org/ovn-2.11.1-12.el7fdn/ovn2.11-2.11.1-12.el7fdn.x86_64.rpm \
                https://markmc.fedorapeople.org/ovn-2.11.1-12.el7fdn/ovn2.11-debuginfo-2.11.1-12.el7fdn.x86_64.rpm \
                https://markmc.fedorapeople.org/ovn-2.11.1-12.el7fdn/ovn2.11-central-2.11.1-12.el7fdn.x86_64.rpm \
