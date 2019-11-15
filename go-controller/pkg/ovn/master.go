@@ -60,6 +60,7 @@ func (oc *Controller) StartClusterMaster(masterNodeName string) error {
 			alreadyAllocated = append(alreadyAllocated, hostsubnet)
 		}
 	}
+	isv6 := false
 	masterSubnetAllocatorList := make([]netutils.SubnetAllocator, 0)
 	// NewSubnetAllocator is a subnet IPAM, which takes a CIDR (first argument)
 	// and gives out subnets of length 'hostSubnetLength' (second argument)
@@ -80,6 +81,7 @@ func (oc *Controller) StartClusterMaster(masterNodeName string) error {
 			hostSubnetBits = 32 - clusterEntry.HostSubnetLength
 		} else {
 			hostSubnetBits = 128 - clusterEntry.HostSubnetLength
+			isv6 = true
 		}
 		subnetAllocator, err := netutils.NewSubnetAllocator(clusterEntry.CIDR.String(), hostSubnetBits, subrange)
 		if err != nil {
@@ -93,8 +95,8 @@ func (oc *Controller) StartClusterMaster(masterNodeName string) error {
 		oc.portGroupSupport = true
 	}
 
-	// Multicast support requires portGroupSupport
-	if oc.portGroupSupport {
+	// Multicast support requires portGroupSupport and is IPv4 only
+	if oc.portGroupSupport && isv6 == false {
 		if _, _, err := util.RunOVNSbctl("--columns=_uuid", "list", "IGMP_Group"); err == nil {
 			oc.multicastSupport = true
 		}
