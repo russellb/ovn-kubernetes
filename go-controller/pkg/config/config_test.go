@@ -135,7 +135,7 @@ func writeTestConfigFile(path string, overrides ...string) error {
 	const defaultData string = `[default]
 mtu=1500
 conntrack-zone=64321
-cluster-subnets=10.129.0.0/14/23
+cluster-subnets=10.129.0.0/14/23,fd01::/48/64
 
 [kubernetes]
 kubeconfig=/path/to/kubeconfig
@@ -253,6 +253,7 @@ var _ = Describe("Config Operations", func() {
 				{mustParseCIDR("10.128.0.0/14"), 23},
 			}))
 			Expect(IPv6Mode).To(Equal(false))
+			Expect(IPv4Mode).To(Equal(true))
 
 			for _, a := range []OvnAuthConfig{OvnNorth, OvnSouth} {
 				Expect(a.Scheme).To(Equal(OvnDBSchemeUnix))
@@ -483,6 +484,7 @@ var _ = Describe("Config Operations", func() {
 			Expect(Kubernetes.ServiceCIDR).To(Equal("172.18.0.0/24"))
 			Expect(Default.ClusterSubnets).To(Equal([]CIDRNetworkEntry{
 				{mustParseCIDR("10.129.0.0/14"), 23},
+				{mustParseCIDR("fd01::/48"), 64},
 			}))
 
 			Expect(OvnNorth.Scheme).To(Equal(OvnDBSchemeSSL))
@@ -642,6 +644,7 @@ cluster-subnets=172.18.0.0/23
 				{mustParseCIDR("172.15.0.0/23"), 24},
 			}))
 			Expect(IPv6Mode).To(Equal(false))
+			Expect(IPv4Mode).To(Equal(true))
 			return nil
 		}
 		cliArgs := []string{
@@ -822,10 +825,13 @@ mode=shared
 
 			Expect(Default.MTU).To(Equal(1500))
 			Expect(Default.ConntrackZone).To(Equal(64321))
-			Expect(Default.RawClusterSubnets).To(Equal("10.129.0.0/14/23"))
+			Expect(Default.RawClusterSubnets).To(Equal("10.129.0.0/14/23,fd01::/48/64"))
 			Expect(Default.ClusterSubnets).To(Equal([]CIDRNetworkEntry{
 				{mustParseCIDR("10.129.0.0/14"), 23},
+				{mustParseCIDR("fd01::/48"), 64},
 			}))
+			Expect(IPv4Mode).To(Equal(true))
+			Expect(IPv6Mode).To(Equal(true))
 			Expect(Logging.File).To(Equal("/var/log/ovnkube.log"))
 			Expect(Logging.Level).To(Equal(5))
 			Expect(CNI.ConfDir).To(Equal("/etc/cni/net.d22"))

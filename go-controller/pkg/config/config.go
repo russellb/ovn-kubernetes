@@ -97,7 +97,12 @@ var (
 	// EnableMulticast enables multicast support between the pods within the same namespace
 	EnableMulticast bool
 
-	// IPv6Mode captures whether we are using IPv6 for OVN logical topology
+	// IPv4Mode captures whether we are using IPv4 for OVN logical topology. It is valid to use
+	// IPv4, IPv6, or both.
+	IPv4Mode bool
+
+	// IPv6Mode captures whether we are using IPv6 for OVN logical topology. It is valid to use
+	// IPv4, IPv6, or both.
 	IPv6Mode bool
 )
 
@@ -1127,10 +1132,15 @@ func initConfigWithPath(ctx *cli.Context, exec kexec.Interface, saPath string, d
 	}
 	OvnSouth = *tmpAuth
 
-	// Determine if ovn-kubernetes is configured to run in IPv6 mode
+	// Determine which IP modes are in use
 	IPv6Mode = false
-	if len(Default.ClusterSubnets) >= 1 && Default.ClusterSubnets[0].CIDR.IP.To4() == nil {
-		IPv6Mode = true
+	IPv4Mode = false
+	for _, clusterSubnet := range Default.ClusterSubnets {
+		if clusterSubnet.CIDR.IP.To4() == nil {
+			IPv6Mode = true
+		} else {
+			IPv4Mode = true
+		}
 	}
 
 	klog.V(5).Infof("Default config: %+v", Default)
